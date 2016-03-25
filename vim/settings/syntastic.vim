@@ -6,6 +6,8 @@ let g:syntastic_auto_jump=0
 let g:syntastic_auto_loc_list=1
 "don't care about warnings
 let g:syntastic_quiet_messages = {'level': 'warnings'}
+"change shell manually as opposed to redirect
+let g:syntastic_shell = $SHELL
 
 " Default to eslint. If you need jshint, you can override this in
 " ~/.vimrc.after

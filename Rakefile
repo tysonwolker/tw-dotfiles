@@ -24,9 +24,6 @@ task :install => [:submodule_init, :submodules] do
     install_files(Dir.glob('{vim,vimrc}'))
     Rake::Task["install_vundle"].execute
   end
-  if want_to_install?('bash configuration (highly recommended')
-    install_files(Dir.glob('{bash,bashrc}'))
-  end 
   Rake::Task["install_prezto"].execute
 
   install_fonts

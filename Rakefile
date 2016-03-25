@@ -25,7 +25,7 @@ task :install => [:submodule_init, :submodules] do
     Rake::Task["install_vundle"].execute
   end
   if want_to_install?('bash configuration (highly recommended')
-    install_files(Dir.glob('{bash,bashrc'))
+    install_files(Dir.glob('{bash,bashrc}'))
   end 
   Rake::Task["install_prezto"].execute
 
@@ -38,6 +38,11 @@ task :install => [:submodule_init, :submodules] do
   success_msg("installed")
 end
 
+task :install_bash do
+  if want_to_install?('bash configuration (highly recommended')
+    install_files(Dir.glob('bash/*'))
+  end 
+end
 task :install_prezto do
   if want_to_install?('zsh enhancements & prezto')
     install_prezto

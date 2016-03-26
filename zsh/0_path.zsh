@@ -9,8 +9,5 @@ path=(
   $GOPATH/bin
 )
 
-# RVM
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
 # NVM
 source $(brew --prefix nvm)/nvm.sh

@@ -2,7 +2,7 @@
 source $(brew --prefix nvm)/nvm.sh
 
 # RVM
-[ -s ${HOME}/.rvm/scripts/rvm ] && source ${HOME}/.rvm/scripts/rvm
+source ~/.rvm/scripts/rvm
 
 NVM_DIR=$HOME/.nvm
 GOPATH=/Users/$USER/go/

@@ -32,9 +32,10 @@ task :install => [:submodule_init, :submodules] do
 
   run_bundle_config
 
+  install_terminal_theme
+  
   success_msg("installed")
 end
-
 task :install_bash do
   if want_to_install?('bash configuration (highly recommended')
     install_files(Dir.glob('bash/*'))
@@ -189,6 +190,14 @@ def install_fonts
   run %{ cp -f $HOME/.yadr/fonts/* $HOME/Library/Fonts } if RUBY_PLATFORM.downcase.include?("darwin")
   run %{ mkdir -p ~/.fonts && cp ~/.yadr/fonts/* ~/.fonts && fc-cache -vf ~/.fonts } if RUBY_PLATFORM.downcase.include?("linux")
   puts
+end
+
+def install_terminal_theme
+  puts "======================================================"
+  puts "Installing Terminal solarized theme."
+  puts "======================================================"
+
+  run %{sh terminal/install-solarized-theme.sh}
 end
 
 def install_term_theme

@@ -1,11 +1,13 @@
-# NVM
-source $(brew --prefix nvm)/nvm.sh
-
 # RVM
 source ~/.rvm/scripts/rvm
 
-NVM_DIR=$HOME/.nvm
-GOPATH=/Users/$USER/go/
+# NVM
+export NVM_DIR=$HOME/.nvm
+source $(brew --prefix nvm)/nvm.sh
+
+# Go
+export GOPATH=/Users/$USER/go/
+
 # path, the 0 in the filename causes this to load first
 path=(
   $GEM_HOME/bin

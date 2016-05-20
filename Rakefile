@@ -36,10 +36,26 @@ task :install => [:submodule_init, :submodules] do
   
   success_msg("installed")
 end
-task :install_bash do
-  if want_to_install?('bash configuration (highly recommended')
-    install_files(Dir.glob('bash/*'))
-  end 
+desc 'Installs python environment'
+task :install_python do
+  put "========================================================="
+  put "Installing Python."
+  put "========================================================="
+    
+  # Install Pip
+  run %{easy_install pip}
+
+  # Virtual Environments
+  run %{pip install virtualenv}
+  run %{pip install virtualenvwrapper}
+  run %{source ~/.extra}
+  
+  # Python 2 Virtual Environment
+  run %{mkvirtualenv py2-data}
+  run %{workon py2-data}
+
+  
+end
 end
 task :install_prezto do
   if want_to_install?('zsh enhancements & prezto')

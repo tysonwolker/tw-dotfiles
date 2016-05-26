@@ -56,7 +56,6 @@ task :install_python do
 
   
 end
-end
 task :install_prezto do
   if want_to_install?('zsh enhancements & prezto')
     install_prezto

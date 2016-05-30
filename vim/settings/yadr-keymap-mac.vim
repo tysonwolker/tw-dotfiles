@@ -30,7 +30,7 @@ nnoremap <D-]> f]ci]
 
 " ==== NERD tree
 " Cmd-Shift-N for nerd tree
-map <D-N> :NERDTreeToggle<CR>
+map <C-g> :NERDTreeToggle<CR>
 
 " move up/down quickly by using Cmd-j, Cmd-k
 " which will move us around by functions

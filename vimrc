@@ -106,6 +106,10 @@ set scrolloff=8         "Start scrolling when we're 8 lines away from margins
 set sidescrolloff=15
 set sidescroll=1
 
+"
+" ================ Mouse ============================
+
+set mouse=a         " Enable mouse use in all modes
 " ================ Search ===========================
 
 set incsearch       " Find the next match as we type the search

@@ -1,6 +1,3 @@
-# RVM
-source ~/.rvm/scripts/rvm
-
 # NVM
 export NVM_DIR=$HOME/.nvm
 source $(brew --prefix nvm)/nvm.sh

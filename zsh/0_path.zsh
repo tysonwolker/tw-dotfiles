@@ -13,4 +13,5 @@ path=(
 	$HOME/.yadr/bin
 	$HOME/.yadr/bin/yadr
   $GOPATH/bin
+  ./node_modules/.bin
 )

@@ -234,6 +234,8 @@ task :install_dev_tools do
     run %{brew install #{tool}}
   end
 
+  run %{brew cask install iterm2}
+
   puts
   puts
 end

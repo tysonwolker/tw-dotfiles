@@ -10,7 +10,7 @@ task :install => [:submodule_init, :submodules] do
   puts "======================================================"
   puts
 
-  install_homebrew if RUBY_PLATFORM.downcase.include?("darwin")
+  install_homebrew
   install_rvm_binstubs
 
   # this has all the runcoms from this directory.
@@ -33,7 +33,7 @@ task :install => [:submodule_init, :submodules] do
   run_bundle_config
 
   install_terminal_theme
-  
+
   success_msg("installed")
 end
 desc 'Installs python environment'
@@ -41,7 +41,7 @@ task :install_python do
   put "========================================================="
   put "Installing Python."
   put "========================================================="
-    
+
   # Install Pip
   run %{easy_install pip}
 
@@ -49,12 +49,12 @@ task :install_python do
   run %{pip install virtualenv}
   run %{pip install virtualenvwrapper}
   run %{source ~/.extra}
-  
+
   # Python 2 Virtual Environment
   run %{mkvirtualenv py2-data}
   run %{workon py2-data}
 
-  
+
 end
 task :install_prezto do
   if want_to_install?('zsh enhancements & prezto')

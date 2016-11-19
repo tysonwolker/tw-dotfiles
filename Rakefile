@@ -11,7 +11,21 @@ task :install => [:submodule_init, :submodules] do
   puts
 
   install_homebrew if RUBY_PLATFORM.downcase.include?("darwin")
-  install_rvm_binstubs
+
+  Rake::Task["install_core_tools"].execute
+  Rake::Task["install_dev_tools"].execute
+
+  if want_to_install?('python environment (highly recommended)')
+    Rake::Task["install_python"].execute
+  end
+
+  if want_to_install?('ruby environment (highly recommended)')
+    Rake::Task["install_ruby_environment"].execute
+  end
+
+  if want_to_install?('go environment (highly recommended)')
+    Rake::Task["install_go_environment"].execute
+  end
 
   # this has all the runcoms from this directory.
   install_files(Dir.glob('git/*')) if want_to_install?('git configs (color, aliases)')
@@ -36,26 +50,7 @@ task :install => [:submodule_init, :submodules] do
 
   success_msg("installed")
 end
-desc 'Installs python environment'
-task :install_python do
-  put "========================================================="
-  put "Installing Python."
-  put "========================================================="
 
-  # Install Pip
-  run %{easy_install pip}
-
-  # Virtual Environments
-  run %{pip install virtualenv}
-  run %{pip install virtualenvwrapper}
-  run %{source ~/.extra}
-
-  # Python 2 Virtual Environment
-  run %{mkvirtualenv py2-data}
-  run %{workon py2-data}
-
-
-end
 task :install_prezto do
   if want_to_install?('zsh enhancements & prezto')
     install_prezto
@@ -161,16 +156,6 @@ def run_bundle_config
   puts
 end
 
-def install_rvm_binstubs
-  puts "======================================================"
-  puts "Installing RVM Bundler support. Never have to type"
-  puts "bundle exec again! Please use bundle --binstubs and RVM"
-  puts "will automatically use those bins after cd'ing into dir."
-  puts "======================================================"
-  run %{ chmod +x $rvm_path/hooks/after_cd_bundler }
-  puts
-end
-
 def install_homebrew
   run %{which brew}
   unless $?.success?
@@ -196,6 +181,162 @@ def install_homebrew
   run %{brew install macvim --custom-icons --with-override-system-vim --with-lua --with-luajit}
   puts
   puts
+end
+
+desc "Installs OSX Tools"
+task :install_core_tools do
+  puts "====================================================="
+  puts "Installing OSX utilities."
+  puts "====================================================="
+
+  formulae = [
+    "coreutils",
+    "moreutils",
+    "findutils",
+    "gnu-sed --with-default-names",
+    "wget --with-iri",
+    "bash-completion2",
+    "homebrew/dupes/grep",
+    "homebrew/dupes/openssh",
+    "homebrew/dupes/screen",
+    "bash",
+    "mackup",
+    "speedtest_cli",
+    "git-lfs",
+    "lynx",
+    "dark-mode"
+  ]
+  formulae.each do |formula|
+    run %{brew install #{formula}}
+  end
+
+  puts
+  puts
+end
+
+desc "Installs development tools"
+task :install_dev_tools do
+  puts "======================================================"
+  puts "Installing base development tools"
+  puts "======================================================"
+
+  tools = [
+    'git',
+    'gitflow',
+    'git-lfs',
+    'heroku-toolbelt',
+    'postgres',
+    'tmux',
+    'fzf',
+    'ccmenu'
+  ]
+  tools.each do |tool|
+    run %{brew install #{tool}}
+  end
+
+  puts
+  puts
+end
+
+desc 'Installs node environment'
+task :install_node do
+  put "========================================================="
+  put "Installing Node Environment."
+  put "========================================================="
+
+  # Install node version manager
+  run %{brew install nvm}
+
+  # Install latest Node
+  run %{nvm install node}
+
+  # Use latest node
+  run %{nvm use node}
+
+  nodeModules = [
+    'caniuse',
+    'npm-check',
+    'speed-test',
+    'trash',
+    'http-server',
+    'David',
+    'wifi-password'
+  ]
+  nodeModules.each do |nodeModule|
+    run %{npm install -g #{nodeModule}}
+  end
+
+end
+desc 'Installs python environment'
+task :install_python do
+  put "========================================================="
+  put "Installing Python Environment."
+  put "========================================================="
+
+  # Install Python
+  run %{brew install python}
+  run %{brew install pyenv}
+
+  # Install Pip
+  run %{easy_install pip}
+
+  # Virtual Environments
+  run %{pip install virtualenv}
+  run %{pip install virtualenvwrapper}
+  run %{source ~/.extra}
+
+  # Python 2 Virtual Environment
+  run %{mkvirtualenv py2-data}
+  run %{workon py2-data}
+
+
+end
+
+desc "Installs ruby environment"
+task :install_ruby_environment do
+  puts "======================================================"
+  puts "Installing ruby environment."
+  puts "======================================================"
+
+  applications = [
+    'rbenv',
+    'rbenv-gemset'
+  ]
+  applications.each do |application|
+    brew_install(application)
+  end
+
+  # Install ruby
+  run %{rbenv install 2.3.2}
+
+  # Set default ruby
+  run %{rbenv global 2.3.2}
+
+  gems = [
+    'lunchy',
+    'sass',
+    'compass'
+  ]
+  gems.each do |gem|
+    run %{gem install #{gem}}
+  end
+
+  puts
+  puts
+end
+
+desc "Installs go lang environment"
+task :install_go_environment do
+  puts "======================================================"
+  puts "Installing go lang environment"
+  puts "======================================================"
+  tools = [
+    'go',
+    'gpm'
+  ]
+  tools.each do |tool|
+    run %{brew install #{tool}}
+  end
 end
 
 def install_fonts
@@ -383,6 +524,10 @@ def apply_theme_to_iterm_profile_idx(index, color_scheme_path)
 
   run %{ /usr/libexec/PlistBuddy -c "Merge '#{color_scheme_path}' :'New Bookmarks':#{index}" ~/Library/Preferences/com.googlecode.iterm2.plist }
   run %{ defaults read com.googlecode.iterm2 }
+end
+
+def brew_install(application)
+  run %{brew install" #{application}}
 end
 
 def success_msg(action)

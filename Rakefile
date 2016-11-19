@@ -15,6 +15,8 @@ task :install => [:submodule_init, :submodules] do
   Rake::Task["install_core_tools"].execute
   Rake::Task["install_dev_tools"].execute
 
+  Rake::Task["install_node"].execute
+
   if want_to_install?('python environment (highly recommended)')
     Rake::Task["install_python"].execute
   end

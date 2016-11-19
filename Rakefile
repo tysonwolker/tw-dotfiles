@@ -271,27 +271,22 @@ task :install_node do
 end
 desc 'Installs python environment'
 task :install_python do
-  put "========================================================="
-  put "Installing Python Environment."
-  put "========================================================="
-
-  # Install Python
-  run %{brew install python}
-  run %{brew install pyenv}
+  puts "========================================================="
+  puts "Installing Python Environment."
+  puts "========================================================="
 
   # Install Pip
   run %{easy_install pip}
 
+  # It fails to install virtualenv if PIP_REQUIRE_VIRTUALENV was true
+  run %{export PIP_REQUIRE_VIRTUALENV=false}
+
+  # Upgrade Pip
+  run %{pip install --upgrade pip}
+
   # Virtual Environments
   run %{pip install virtualenv}
   run %{pip install virtualenvwrapper}
-  run %{source ~/.extra}
-
-  # Python 2 Virtual Environment
-  run %{mkvirtualenv py2-data}
-  run %{workon py2-data}
-
-
 end
 
 desc "Installs ruby environment"

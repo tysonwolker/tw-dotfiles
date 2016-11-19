@@ -23,6 +23,7 @@ if [ ! -d "$HOME/.yadr" ]; then
     cd "$HOME/.yadr"
     [ "$1" = "ask" ] && export ASK="true"
     rake install
+    sh ./osx/.macos
 else
     echo "YADR is already installed"
 fi

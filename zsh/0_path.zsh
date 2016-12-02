@@ -14,3 +14,5 @@ path=(
   $GOPATH/bin
   ./node_modules/.bin
 )
+
+eval "$(rbenv init -)"

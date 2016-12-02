@@ -224,7 +224,7 @@ task :install_dev_tools do
 
   tools = [
     'git',
-    'gitflow',
+    'git-flow',
     'git-lfs',
     'heroku-toolbelt',
     'postgres',
@@ -244,18 +244,20 @@ end
 
 desc 'Installs node environment'
 task :install_node do
-  put "========================================================="
-  put "Installing Node Environment."
-  put "========================================================="
+  puts "========================================================="
+  puts "Installing Node Environment."
+  puts "========================================================="
 
   # Install node version manager
-  run %{brew install nvm}
+  run %{which brew}
+  unless $?.success?
+    puts "Installing NVM for you now"
+    run %{curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.1/install.sh | bash}
+  end
 
   # Install latest Node
-  run %{nvm install node}
-
-  # Use latest node
-  run %{nvm use node}
+  run %{export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm install node && nvm use node}
 
   nodeModules = [
     'caniuse',
@@ -266,11 +268,13 @@ task :install_node do
     'David',
     'wifi-password'
   ]
+  puts "Installing node modules now"
   nodeModules.each do |nodeModule|
     run %{npm install -g #{nodeModule}}
   end
 
 end
+
 desc 'Installs python environment'
 task :install_python do
   puts "========================================================="
@@ -304,6 +308,9 @@ task :install_ruby_environment do
   applications.each do |application|
     brew_install(application)
   end
+
+  # Init rbenv
+  run %{rbenv init}
 
   # Install ruby
   run %{rbenv install 2.3.2}
@@ -526,7 +533,7 @@ def apply_theme_to_iterm_profile_idx(index, color_scheme_path)
 end
 
 def brew_install(application)
-  run %{brew install" #{application}}
+  run %{brew install #{application}}
 end
 
 def success_msg(action)
